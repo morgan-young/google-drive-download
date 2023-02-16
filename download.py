@@ -10,6 +10,8 @@ def authenticate_with_google():
     """
     We need to authenticate with the service account
     before we do anything.
+    
+    :return: the service is an authenticated session
 
     """
     scope = ['https://www.googleapis.com/auth/drive']
@@ -19,12 +21,17 @@ def authenticate_with_google():
     return service
 
 
-def get_id_of_file(service, querystring):
+def get_id_of_file(service, querystring) -> str:
     """
     This gets the id of the file we want,
     identified by the querystring (file name).
     
     We need the id so we can download it.
+    
+    :param service: the authenticated Google Drive service
+    :param str querystring: the name of the file we want to get the id for. For example, really_important_data.csv
+    :return: the id of the file name provided in the querystring
+    :rytpe: str
     
     """
     files = []
@@ -51,6 +58,10 @@ def download_zip_file_from_google_drive(service, file_id, file_name):
 
     Then it downloads it.
     
+    :param service: the authenticated Google Drive service
+    :param str file_id: the id of the file we want to download
+    :param str file_name: what we want to call the file after we download it
+    
     """
     request = service.files().get_media(fileId=file_id)
 
@@ -68,8 +79,6 @@ def download_zip_file_from_google_drive(service, file_id, file_name):
     with open(os.path.join('', file_name  ), 'wb') as f:
         f.write(fh.read())
         f.close()
-    
-    return("file_name")
 
 
 def unzip_files(zip_file_name):
@@ -79,6 +88,8 @@ def unzip_files(zip_file_name):
     in a folder called unzipped_invoices.
 
     If the folder doesn't exist, it'll create it.
+    
+    :param zip_file_name str: the name of the zip file that contains the files we want
     
     """
     with zipfile.ZipFile(zip_file_name, 'r') as zip_ref:
